@@ -15,17 +15,8 @@ module OnePlayerMode
   end
 
   def starting_message
-    puts 'Welcome to Code Breaker!
-    
-    Please enter a number 4 digits long with the numbers being only 1-6.
-    
-    You will be given clues for digits that are correct and for digits that are correct and in the correct position.
-
-    You will have 12 chances to break the code.
-    
-    Good luck!'
+    puts 'Please enter a number 4 digits long with the numbers being only 1-6.'    
   end
-
   def losers_end_message
     puts 'Sorry you ran out of tries without breaking the code.  Please try again.'
   end
@@ -34,8 +25,8 @@ module OnePlayerMode
     puts 'Way to go! You broke the code!  I see a job at the NSA in you future!'
   end
 
-  def secret_numbers
-    puts 'The secret code was #{secret}'
+  def secret_numbers(secrets)
+    puts "The secret code was #{secrets}"
   end
 
   def guess_attempts_array
@@ -47,12 +38,12 @@ module OnePlayerMode
       guesses << gets.to_i
       i += 1
     end
-    puts "\nYour guesses = #{guesses}"
+    puts "Your guesses = #{guesses}"
   end
     
   def clues(correct, almost)
     puts "● #{correct} correct number in the correct position."
-    puts "⦿ #{almost} correct number in the wrong part of town.\n "
+    puts "⦿ #{almost} correct number in the wrong part of town."
   end
 
   def check(secrets, guesses)
@@ -69,8 +60,35 @@ module OnePlayerMode
   end
 end
 
+# Classes that will build out the play for the computert to pick four random numbers #
 
+class PLayersGuess
+  include OnePlayerMode
+  attr_accessor :turn
 
+  def initialize
+    say_guess
+    @turn = 0
+  end
 
+  def game_play
+    secrets = create
+    while turn = guess_keeper
+      if !compare(secrets, guesses)
+        @turn += 1
+      else
+        break
+      end
+    end
 
+    # If it breaks from while loop this whill see why #
+
+    if turn < 12
+      winners_end_message
+    else
+      losers_end_message
+      secret_numbers
+    end
+  end
+end
 
