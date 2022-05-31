@@ -38,5 +38,39 @@ module OnePlayerMode
     puts 'The secret code was #{secret}'
   end
 
-  
+  def guess_attempts_array
+    i = 0
+    guesses = []
+    position = %w[one two three four]
+    while i < 4
+      puts "Please guess the #{position[i]} number:"
+      guesses << gets.to_i
+      i += 1
+    end
+    puts "\nYour guesses = #{guesses}"
+  end
+    
+  def clues(correct, almost)
+    puts "● #{correct} correct number in the correct position."
+    puts "⦿ #{almost} correct number in the wrong part of town.\n "
+  end
+
+  def check(secrets, guesses)
+    correct = 0
+    almost = 0
+    guesses.each_index do |i|
+      correct += 1
+      elsif guesses.include?(secrets[i])
+        almost += 1
+      end
+    end
+    clues(correct, almost)
+    correct == 4
+  end
+end
+
+
+
+
+
 
