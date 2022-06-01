@@ -1,13 +1,4 @@
-##### Things that I need to do for Mastermind game ######
-# Lay out rules of engagement (rules for the game) #
-# Make sure to assume the computer is the one to randomly select the 4 digit number (Just at first) #
-# Let player choose to be codebreaker (the one to guess the code) #
-# Or let player choose to be the code chooser (person who chooses 4 colors or numbers) #
-# Make sure the program gives the proper feedback (if correct and in the right spot or if just correct) to the codebreaker #
-# Something to figure out if the game has been completed successfully #
-# Give message at end for either winning or loosing player #
-# After getting game to work, go back and make so computer makes choice on who does what role #
-# Try to implement a strategy for the computer to follow #
+
 
 class Mastermind
   def initialize
@@ -15,6 +6,10 @@ class Mastermind
     @guess_number = 12
     @winner = false
   end
+
+# this takes user input and determines if it's valid or invalid or the actual code (winner) #
+# it also determines how many attempts left and displays to player #   
+
   def ask_what_you_guess
     while @guess_number > 0 do
       break if @winner
@@ -31,6 +26,8 @@ class Mastermind
 
   end
 
+# method for guessing the code and what happens after  #
+
   def guess(number)
     if number == @answer
       @winner = true
@@ -41,6 +38,8 @@ class Mastermind
       @guess_number -= 1
     end
   end
+
+# method for the end of game / different messages for winner or loser #
 
   def game_over
     input = nil
@@ -55,6 +54,8 @@ class Mastermind
     restart_game?(input)
   end
 
+# gives player option to restart the game at the end #
+
   def restart_game?(input)
     case input
     when "y"
@@ -64,4 +65,26 @@ class Mastermind
     end
   end
 
-  def
+# creates code for player to break #
+
+  def create_code
+    code = []
+    until code.size == 4 do
+      number = (rand(6) + 1).to_s
+      code << number unless code.include?(number)
+    end
+    code
+  end
+
+# Checks to see if entry is valid #
+
+  def guess_is_vaild?(input)
+    if input.size == 4 && input.all? { |e| "123456".include? (e) }
+      return true
+    else
+      return false
+    end
+  end
+
+  def get_y(number)
+    
