@@ -2,7 +2,7 @@
 
 class Mastermind
   def initialize
-    @answer = create_answer
+    @answer = create_code
     @guess_number = 12
     @winner = false
   end
@@ -34,7 +34,7 @@ class Mastermind
     else
       x = get_x(number)
       y = get_y(number)
-      puts "Please try again, #{x}X#{y}Y."
+      puts "Please try again, #{x} Correct/#{y} Wrong Spot."
       @guess_number -= 1
     end
   end
@@ -86,5 +86,35 @@ class Mastermind
     end
   end
 
+# method(s) to take user input and place into correct place #
+
   def get_y(number)
-    
+    y = 0 
+    number.each_with_index do |e, i|
+      y += 1 if e == @answer[i]
+    end
+    return y 
+  end
+
+  def get_x(number)
+    x = 0
+    number.each_with_index do |e, i|
+      x += 1 if e != number[i] && number.include?(e)
+    end
+    return x 
+  end
+end
+
+puts "***********************************************\n" \
+     "*CodeBreaker: can you guess the right number? *\n" \
+     "*   Guess a 4 digit number composed of 1-6.   *\n" \
+     "*    Y means how many numbers are correct.    *\n" \
+     "*    X correct but in the wrong position.     *\n" \
+     "***********************************************"
+
+     restart = true
+     while restart do
+       mastermind = Mastermind.new
+       restart = mastermind.ask_what_you_guess
+     end
+     puts "Thanks for playing CodeBreaker, Code Master!"
