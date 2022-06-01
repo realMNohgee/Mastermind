@@ -9,106 +9,59 @@
 # After getting game to work, go back and make so computer makes choice on who does what role #
 # Try to implement a strategy for the computer to follow #
 
-module OnePlayerMode
-  def create
-    Array.new(4) { rand(1..6) }
-  end
-
-  def starting_message
-    puts 'Please enter a number 4 digits long with the numbers being only 1-6.'    
-  end
-  def losers_end_message
-    puts 'Sorry you ran out of tries without breaking the code.  Please try again.'
-  end
-
-  def winners_end_message
-    puts 'Way to go! You broke the code!  I see a job at the NSA in you future!'
-  end
-
-  def secret_numbers(secrets)
-    puts "The secret code was #{secrets}"
-  end
-
-  def guess_attempts_array
-    i = 0
-    guesses = []
-    position = %w[one two three four]
-    while i < 4
-      puts "Please guess the #{position[i]} number:"
-      guesses << gets.to_i
-      i += 1
-    end
-    puts "Your guesses = #{guesses}"
-  end
-    
-  def clues(correct, almost)
-    puts "● #{correct} correct number in the correct position."
-    puts "⦿ #{almost} correct number in the wrong part of town."
-  end
-
-  def check(secrets, guesses)
-    correct = 0
-    almost = 0
-    guesses.each_index do |i|
-      correct += 1
-      if guesses.include?(secrets[i])
-        almost += 1
-      end
-    end
-    clues(correct, almost)
-    correct == 4
-  end
-end
-
-# Classes that will build out the play for the computer to pick four random numbers #
-
-class PlayersGuess
-  include OnePlayerMode
-  attr_accessor :turn
-
+class Mastermind
   def initialize
-    @turn = 0
+    @answer = create_answer
+    @guess_number = 12
+    @winner = false
   end
-
-  def game_play
-    secrets = create
-    while turn = guess_keeper
-      if !compare(secrets, guesses)
-        @turn += 1
+  def ask_what_you_guess
+    while @guess_number > 0 do
+      break if @winner
+      p "#{@guess_number.to_s.rjust(2)} attempts left: "
+      input = gets.chomp.split("")
+      if guess_is_vaild?(input)
+        win = guess(input)
       else
-        break
+        puts "Invalid input! Please try again!"
       end
     end
+    
+    game_over
 
-    # If it breaks from while loop this whill see why #
+  end
 
-    if turn < 12
-      winners_end_message
+  def guess(number)
+    if number == @answer
+      @winner = true
     else
-      losers_end_message
-      secret_numbers(secrets)
+      x = get_x(number)
+      y = get_y(number)
+      puts "Please try again, #{x}X#{y}Y."
+      @guess_number -= 1
     end
   end
-end
 
-public
-
-def play_the_game
-  is_on = true
-  while is_on
-    puts "You will be The Codebreaker!"
-    puts "Pleae press one (1) to start the game."
-    input = gets
-    if input.to_i == 1
-      PlayersGuess.new
-      is_on = false
+  def game_over
+    input = nil
+    until ["y", "n"].include?(input)
+      if @winner
+        print "You won! Would you like to try again? [Y/N]"
       else
-        puts "What are you doing, David?!\nI don't understand why you would enter that. Try again."
-        is_on = true
+        print "You lose, this time!  Would you like to give it another try? [Y/N]"
       end
+      input = gets.chomp.downcase
+    end
+    restart_game?(input)
+  end
+
+  def restart_game?(input)
+    case input
+    when "y"
+      true
+    when "n"
+      false
     end
   end
 
-
-  play_the_game
-
+  def
