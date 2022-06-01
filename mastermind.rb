@@ -1,9 +1,9 @@
-
+require 'prybye-bug'
 
 class Mastermind
   def initialize
     @answer = create_code
-    @guess_number = 12
+    @guess = 12
     @winner = false
   end
 
@@ -11,9 +11,9 @@ class Mastermind
 # it also determines how many attempts left and displays to player #   
 
   def ask_what_you_guess
-    while @guess_number > 0 do
+    while @guess > 0 do
       break if @winner
-      p "#{@guess_number.to_s.rjust(2)} attempts left: "
+      p "#{@guess.to_s.rjust(2)} attempts left: "
       input = gets.chomp.split("")
       if guess_is_vaild?(input)
         win = guess(input)
@@ -35,7 +35,7 @@ class Mastermind
       x = get_x(number)
       y = get_y(number)
       puts "Please try again, #{x} Correct/#{y} Wrong Spot."
-      @guess_number -= 1
+      @guess -= 1
     end
   end
 
@@ -98,7 +98,7 @@ class Mastermind
 
   def get_x(number)
     x = 0
-    number.each_with_index do |e, i|
+    @answer.each_with_index do |e, i|
       x += 1 if e != number[i] && number.include?(e)
     end
     return x 
