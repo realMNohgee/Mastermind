@@ -51,7 +51,7 @@ module OnePlayerMode
     almost = 0
     guesses.each_index do |i|
       correct += 1
-      elsif guesses.include?(secrets[i])
+      if guesses.include?(secrets[i])
         almost += 1
       end
     end
@@ -60,14 +60,13 @@ module OnePlayerMode
   end
 end
 
-# Classes that will build out the play for the computert to pick four random numbers #
+# Classes that will build out the play for the computer to pick four random numbers #
 
-class PLayersGuess
+class PlayersGuess
   include OnePlayerMode
   attr_accessor :turn
 
   def initialize
-    say_guess
     @turn = 0
   end
 
@@ -87,8 +86,29 @@ class PLayersGuess
       winners_end_message
     else
       losers_end_message
-      secret_numbers
+      secret_numbers(secrets)
     end
   end
 end
+
+public
+
+def play_the_game
+  is_on = true
+  while is_on
+    puts "You will be The Codebreaker!"
+    puts "Pleae press one (1) to start the game."
+    input = gets
+    if input.to_i == 1
+      PlayersGuess.new
+      is_on = false
+      else
+        puts "What are you doing, David?!\nI don't understand why you would enter that. Try again."
+        is_on = true
+      end
+    end
+  end
+
+
+  play_the_game
 
