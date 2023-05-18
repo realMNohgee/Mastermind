@@ -1,0 +1,184 @@
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/realMNohgee/Mastermind/blob/main/votersFirstBlockChain\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "Sure, here is the code for a blockchain-based voting system in Python:"
+      ],
+      "metadata": {
+        "id": "IQsliMB2xrsZ"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import hashlib\n",
+        "import time\n",
+        "\n",
+        "# This class represents a block in the blockchain.\n",
+        "class Block:\n",
+        "\n",
+        "    # This is the constructor for the Block class.\n",
+        "    def __init__(self, index, timestamp, data, previous_hash):\n",
+        "        self.index = index\n",
+        "        self.timestamp = timestamp\n",
+        "        self.data = data\n",
+        "        self.previous_hash = previous_hash\n",
+        "\n",
+        "    # This method calculates the hash of the block.\n",
+        "    def hash(self):\n",
+        "        sha = hashlib.sha256()\n",
+        "        sha.update(str(self.index).encode('utf-8'))\n",
+        "        sha.update(str(self.timestamp).encode('utf-8'))\n",
+        "        sha.update(self.data.encode('utf-8'))\n",
+        "        sha.update(self.previous_hash.encode('utf-8'))\n",
+        "        return sha.hexdigest()\n",
+        "\n",
+        "    # This method adds a transaction to the block.\n",
+        "    def add_transaction(self, sender, recipient, amount):\n",
+        "        self.data += f'{sender} sent {amount} to {recipient}\\n'\n",
+        "\n",
+        "# This class represents the blockchain.\n",
+        "class Blockchain:\n",
+        "\n",
+        "    # This is the constructor for the Blockchain class.\n",
+        "    def __init__(self):\n",
+        "        self.chain = []\n",
+        "        self.pending_transactions = []\n",
+        "\n",
+        "    # This method adds a block to the blockchain.\n",
+        "    def add_block(self, block):\n",
+        "        self.chain.append(block)\n",
+        "\n",
+        "    # This method verifies a block.\n",
+        "    def verify_block(self, block):\n",
+        "        if block.previous_hash != self.chain[-1].hash():\n",
+        "            return False\n",
+        "        if not hashlib.sha256(block.data.encode('utf-8')).hexdigest() == block.hash():\n",
+        "            return False\n",
+        "        return True\n",
+        "\n",
+        "    # This method mines a block.\n",
+        "    def mine_block(self):\n",
+        "        block = Block(len(self.chain), time.time(), self.pending_transactions, self.chain[-1].hash())\n",
+        "        while not self.verify_block(block):\n",
+        "            block.nonce += 1\n",
+        "        return block\n",
+        "\n",
+        "    # This method gets the latest block.\n",
+        "    def get_latest_block(self):\n",
+        "        return self.chain[-1]\n",
+        "\n",
+        "    # This method gets the transactions in a block.\n",
+        "    def get_transactions_in_block(self, block):\n",
+        "        return block.data.split('\\n')\n",
+        "\n",
+        "    # This method gets the balance of an account.\n",
+        "    def get_balance_of_account(self, account):\n",
+        "        balance = 0\n",
+        "        for block in self.chain:\n",
+        "            for transaction in block.data.split('\\n'):\n",
+        "                if transaction.startswith(account):\n",
+        "                    balance += int(transaction.split()[1])\n",
+        "        return balance\n",
+        "\n",
+        "# This class represents the user interface.\n",
+        "class UI:\n",
+        "\n",
+        "    # This is the constructor for the UI class.\n",
+        "    def __init__(self, blockchain):\n",
+        "        self.blockchain = blockchain\n",
+        "\n",
+        "    # This method shows the balance of an account.\n",
+        "    def show_balance(self, account):\n",
+        "        balance = self.blockchain.get_balance_of_account(account)\n",
+        "        print(f'The balance of {account} is {balance}')\n",
+        "\n",
+        "    # This method sends a transaction.\n",
+        "    def send_transaction(self, sender, recipient, amount):\n",
+        "        transaction = f'{sender} sent {amount} to {recipient}\\n'\n",
+        "        self.blockchain.pending_transactions.append(transaction)\n",
+        "\n",
+        "    # This method mines a block.\n",
+        "    def mine_block(self):\n",
+        "        block = self.blockchain.mine_block()\n",
+        "        print(f'Mined block {block.index} with hash {block.hash}')\n",
+        "        self.blockchain.add_block(block)\n",
+        "\n",
+        "# This is the main function.\n",
+        "def main():\n",
+        "\n",
+        "    # Create a new blockchain.\n",
+        "    blockchain = Blockchain()\n",
+        "\n",
+        "    # Create a new user interface.\n",
+        "    ui = UI(blockchain)\n",
+        "\n",
+        "    # Start the user interface.\n",
+        "    while True:\n",
+        "        print('What would you like to do?')\n",
+        "        print('1. Show balance')\n",
+        "        print('2. Send transaction')\n",
+        "        print('3."
+      ],
+      "outputs": [
+        {
+          "output_type": "error",
+          "ename": "SyntaxError",
+          "evalue": "ignored",
+          "traceback": [
+            "\u001b[0;36m  File \u001b[0;32m\"<ipython-input-2-25112566abee>\"\u001b[0;36m, line \u001b[0;32m108\u001b[0m\n\u001b[0;31m    print('3.\u001b[0m\n\u001b[0m          ^\u001b[0m\n\u001b[0;31mSyntaxError\u001b[0m\u001b[0;31m:\u001b[0m unterminated string literal (detected at line 108)\n"
+          ]
+        }
+      ],
+      "execution_count": 2,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 208
+        },
+        "id": "t2kh5_9fxrsf",
+        "outputId": "2677d803-1c81-4d3e-dcbc-a32b9ed0f2f6"
+      }
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "<div class=\"md-recitation\">\n",
+        "  Sources\n",
+        "  <ol>\n",
+        "  <li><a href=\"https://dev.to/aunyks/lets-build-the-tiniest-blockchain\">https://dev.to/aunyks/lets-build-the-tiniest-blockchain</a></li>\n",
+        "  <li><a href=\"https://github.com/cazzhong/PythonExercise\">https://github.com/cazzhong/PythonExercise</a></li>\n",
+        "  <li><a href=\"https://github.com/qhweng/using-data-structures\">https://github.com/qhweng/using-data-structures</a></li>\n",
+        "  <li><a href=\"https://github.com/bplusv/dsa-problems\">https://github.com/bplusv/dsa-problems</a> subject to MIT</li>\n",
+        "  </ol>\n",
+        "</div>"
+      ],
+      "metadata": {
+        "id": "9D_qdtXQxrsi"
+      }
+    }
+  ],
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "display_name": "Python 3",
+      "name": "python3"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 0
+}
